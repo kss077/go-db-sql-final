@@ -105,6 +105,19 @@ func main() {
 	}
 	defer db.Close()
 
+	schema := `
+    CREATE TABLE IF NOT EXISTS parcel (
+        number      INTEGER PRIMARY KEY,
+        client      INTEGER NOT NULL,
+        status      TEXT NOT NULL,
+        address     TEXT NOT NULL,
+        created_at  DATETIME NOT NULL
+    );`
+	_, err = db.Exec(schema)
+	if err != nil {
+		log.Fatal("failed to create table:", err)
+	}
+
 	store := NewParcelStore(db) // создайте объект ParcelStore функцией NewParcelStore
 	service := NewParcelService(store)
 
